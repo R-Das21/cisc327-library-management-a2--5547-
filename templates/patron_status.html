@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>👤 Patron Status</h2>
+
+<form method="get" action="{{ url_for('patron.status') }}">
+  <div class="form-group">
+    <label for="patron_id">Patron ID (6 digits)</label>
+    <input type="text" id="patron_id" name="patron_id" value="{{ patron_id }}" maxlength="6" />
+  </div>
+  <button type="submit" class="btn">View Status</button>
+  <a href="{{ url_for('catalog.catalog') }}" class="btn btn-danger">Back to Catalog</a>
+  <hr/>
+</form>
+
+{% if report %}
+  <h3>Summary</h3>
+  <p><strong>Patron ID:</strong> {{ report.patron_id }}</p>
+  <p><strong>Current Borrow Count:</strong> {{ report.current_borrow_count }}</p>
+  <p><strong>Total Late Fees:</strong> ${{ '%.2f'|format(report.total_late_fees) }}</p>
+
+  <h3>Currently Borrowed</h3>
+  {% if report.current_borrows %}
+    <table>
+      <thead>
+        <tr>
+          <th>Book ID</th>
+          <th>Title</th>
+          <th>Due Date</th>
+          <th>Days Overdue</th>
+          <th>Late Fee</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in report.current_borrows %}
+          <tr>
+            <td>{{ item.book_id }}</td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.due_date }}</td>
+            <td>{{ item.days_overdue }}</td>
+            <td>${{ '%.2f'|format(item.late_fee) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No books currently borrowed.</p>
+  {% endif %}
+
+  <h3>Borrowing History</h3>
+  {% if report.history %}
+    <table>
+      <thead>
+        <tr>
+          <th>Book ID</th>
+          <th>Title</th>
+          <th>Borrow Date</th>
+          <th>Due Date</th>
+          <th>Return Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in report.history %}
+          <tr>
+            <td>{{ item.book_id }}</td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.borrow_date }}</td>
+            <td>{{ item.due_date }}</td>
+            <td>{{ item.return_date or '-' }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No borrowing history found.</p>
+  {% endif %}
+{% endif %}
+
+{% endblock %}
