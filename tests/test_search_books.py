@@ -11,7 +11,7 @@ def test_search_returns_list_even_unimplemented():
 
 def test_search_title_partial_case_insensitive(mocker):
     """Title partial + case-insensitive should match."""
-    mocker.patch("library_service.get_all_books", return_value=[
+    mocker.patch("services.library_service.get_all_books", return_value=[
         {"title": "To Kill a Mockingbird", "author": "Harper Lee", "isbn": "9780061120084"},
         {"title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "isbn": "9780743273565"},
     ])
@@ -22,7 +22,7 @@ def test_search_title_partial_case_insensitive(mocker):
 
 def test_search_author_partial_case_insensitive(mocker):
     """Author partial + case-insensitive should match"""
-    mocker.patch("library_service.get_all_books", return_value=[
+    mocker.patch("services.library_service.get_all_books", return_value=[
         {"title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "isbn": "9780743273565"},
        
     ])
@@ -32,7 +32,7 @@ def test_search_author_partial_case_insensitive(mocker):
 
 def test_search_isbn_exact_match(mocker):
     """ISBN search should be exact match only."""
-    mocker.patch("library_service.get_all_books", return_value=[
+    mocker.patch("services.library_service.get_all_books", return_value=[
         {"title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "isbn": "9780743273565"},
         {"title": "To Kill a Mockingbird", "author": "Harper Lee", "isbn": "9780061120084"},
     ])
@@ -43,7 +43,7 @@ def test_search_isbn_exact_match(mocker):
 
 def test_search_invalid_type_falls_back_to_title_author(mocker):
     """Invalid search type falls back to searching title/author (implementation behavior)."""
-    mocker.patch("library_service.get_all_books", return_value=[
+    mocker.patch("services.library_service.get_all_books", return_value=[
         {"title": "Book A", "author": "X", "isbn": "5555555555555"},
     ])
     results = search_books_in_catalog("book", "publisher")

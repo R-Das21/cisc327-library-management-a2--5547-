@@ -6,8 +6,8 @@ from library_service import (
 
 def test_add_book_valid_input(mocker):
     """Test adding a book with valid input without relying on DB."""
-    mocker.patch("library_service.get_book_by_isbn", return_value=None)
-    mocker.patch("library_service.insert_book", return_value=True)
+    mocker.patch("services.library_service.get_book_by_isbn", return_value=None)
+    mocker.patch("services.library_service.insert_book", return_value=True)
     success, message = add_book_to_catalog("Test Book", "Test Author", "1234567890123", 5)
     assert success is True
     assert "successfully" in message.lower()
@@ -50,7 +50,7 @@ def test_add_book_negative_copies():
 
 def test_add_book_duplicate_isbn(mocker):
     """Duplicate ISBN should be rejected."""
-    mocker.patch("library_service.get_book_by_isbn", return_value={"isbn": "1234567890123"})
+    mocker.patch("services.library_service.get_book_by_isbn", return_value={"isbn": "1234567890123"})
     success, message = add_book_to_catalog("Book", "Author", "1234567890123", 3)
     assert success == False
     assert "already exists" in message.lower()
